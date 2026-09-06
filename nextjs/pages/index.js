@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,30 @@ const users = [
 ];
 
 export default function Home() {
+  const router = useRouter();
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.replace("/login");
+      return;
+    }
+
+    setAuthenticated(true);
+  }, [router]);
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    router.replace("/login");
+  }
+
+  if (!authenticated) {
+    return null;
+  }
+
   return (
     <main className="min-h-screen bg-muted/30">
       <div className="container py-10">
@@ -27,8 +52,8 @@ export default function Home() {
             </p>
           </div>
 
-          <Button asChild>
-            <Link href="/login">Log in</Link>
+          <Button variant="outline" onClick={handleLogout}>
+            Log out
           </Button>
         </div>
 
