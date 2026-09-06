@@ -1,18 +1,23 @@
-from typing import Union
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from database import *
-from routes.users import router
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+
+from database import connect_db, disconnect_db, setup_db
+from routes.auth import router as auth_router
 
 
-app = FastAPI()
-
-app.include_router(router, prefix="/api")
-
-@app.on_event("startup")
-async def startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     await connect_db()
-
-@app.on_event("shutdown")
-async def shutdown():
+    await setup_db()
+    yield
     await disconnect_db()
+
+
+app = FastAPI(title="ACP App API", lifespan=lifespan)
+app.include_router(auth_router, prefix="/api")
+
+
+@app.get("/")
+async def root():
+    return {"message": "ACP App API"}

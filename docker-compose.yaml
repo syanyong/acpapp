@@ -6,9 +6,11 @@ services:
       - "3000:3000"
     volumes:
       - ./nextjs:/src
-      - /src/node_modules # This masks the node_modules directory from the host system and prevents it from being mapped from your local filesystem. The container will manage its own node_modules directory.
+      - /src/node_modules
     working_dir: /src
     command: npm run dev
+    depends_on:
+      - backend-api
 
   db:
     image: postgres:13
@@ -20,17 +22,28 @@ services:
       POSTGRES_DB: advcompro
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temp -d advcompro"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  fastapi:
+  backend-api:
     build:
       context: ./backend-api
     ports:
       - "8000:8000"
     volumes:
       - ./backend-api:/src
+    environment:
+      POSTGRES_USER: temp
+      POSTGRES_PASSWORD: temp
+      POSTGRES_DB: advcompro
+      POSTGRES_HOST: db
     command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:

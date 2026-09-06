@@ -1,19 +1,53 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import Grid from "@mui/material/Grid2";
-import { Box, Typography, Button, TextField } from "@mui/material"; // Use by LoginForm
-import useBearStore from "@/store/useBearStore";
+import Link from "next/link";
 
-function Home() {
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+const users = [
+  { name: "Alice", email: "alice@example.com", role: "Admin" },
+  { name: "Bob", email: "bob@example.com", role: "Member" },
+  { name: "Charlie", email: "charlie@example.com", role: "Member" },
+];
+
+export default function Home() {
   return (
-    <>
+    <main className="min-h-screen bg-muted/30">
+      <div className="container py-10">
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Users</h1>
+            <p className="mt-2 text-muted-foreground">
+              Static UI data for the starter application.
+            </p>
+          </div>
 
-      <main>
-        <Box>This is index page</Box>
-      </main>
-    </>
+          <Button asChild>
+            <Link href="/login">Log in</Link>
+          </Button>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {users.map((user) => (
+            <Card key={user.email}>
+              <CardHeader>
+                <CardTitle className="text-lg">{user.name}</CardTitle>
+                <CardDescription>{user.email}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <span className="inline-flex rounded-full bg-secondary px-2.5 py-1 text-xs font-medium">
+                  {user.role}
+                </span>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </main>
   );
 }
-
-export default Home;
