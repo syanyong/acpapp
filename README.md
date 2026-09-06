@@ -60,7 +60,7 @@ docker-compose build
 │   ├── next.config.mjs    # Next.js configuration file
 │   ├── package.json       # Project dependencies and scripts
 │   └── .gitignore         # Ignored files for Git
-└── fastapi/
+└── backend-api/
     ├── app.py             # FastAPI app entry point
     ├── Dockerfile         # Dockerfile for FastAPI backend
     ├── requirements.txt   # Python dependencies for FastAPI
@@ -90,7 +90,7 @@ In this project, all the front-end routes and logic for the UI are defined withi
 To see a simple example of a Next.js page, you can refer to pages/page1.js. It contains the structure for defining a component-based page that is accessible through /page1. You can use this as a reference to add more pages to your project.
 
 ## API Proxy Configuration
-The project is configured with an API proxy to handle backend requests seamlessly. All routes that begin with /api will be redirected to the backend server running on http://backend:8000. This ensures that API calls are proxied to the backend service without the need to modify frontend code.
+The project is configured with an API proxy to handle backend requests seamlessly. All routes that begin with /api will be redirected to the backend server running on http://fastapi:8000. This ensures that API calls are proxied to the backend service without the need to modify frontend code.
 
 This proxy configuration can be modified or updated inside the next.config.mjs file:
 
@@ -103,12 +103,12 @@ The FastAPI backend is connected to a PostgreSQL database. The `database.py` fil
 UserCreate, UserUpdate, and User: These models define the schema for the user data, used for input validation and serialization of request and response data.
 
 ### API Endpoints:
-The routes folder in the FastAPI backend contains the API route definitions, which are essentially the endpoints that clients (such as the frontend or external systems) can use to interact with the backend. You can create your new endpoint but don't forget to mention in [app.py](/fastapi/app.py)
+The routes folder in the FastAPI backend contains the API route definitions, which are essentially the endpoints that clients (such as the frontend or external systems) can use to interact with the backend. You can create your new endpoint but don't forget to mention in [app.py](/backend-api/app.py)
 
-Example FastAPI route to interact with the PostgreSQL database can be found in [users.py](/fastapi/routes/users.py)
+Example FastAPI route to interact with the PostgreSQL database can be found in [users.py](/backend-api/routes/users.py)
 
 ### Database Interaction Function:
-The database interaction function e.g. the query string can be found in [database.py](/fastapi/database.py)
+The database interaction function e.g. the query string can be found in [database.py](/backend-api/database.py)
 
 ## Key Technology
 
